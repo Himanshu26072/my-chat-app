@@ -52,12 +52,12 @@ const Home = () => {
   );
 
   return (
-    /* CHANGE 1: Used h-[100dvh] to fix mobile browser address bar scaling issues */
+    /* Changed to h-dvh for better mobile viewport handling */
     <div className="flex h-[100dvh] w-screen bg-gray-200 dark:bg-gray-900 transition-colors duration-300 overflow-hidden relative">
       
       {/* --- RESPONSIVE SIDEBAR --- */}
       <div className={`
-        fixed inset-y-0 left-0 z-50 w-72 bg-white dark:bg-gray-800 transform 
+        fixed inset-y-0 left-0 z-50 w-[280px] bg-white dark:bg-gray-800 transform 
         ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'} 
         transition-transform duration-300 ease-in-out
         md:relative md:translate-x-0 md:flex border-r border-gray-300 dark:border-gray-700
@@ -66,6 +66,7 @@ const Home = () => {
       </div>
 
       {/* --- MAIN CHAT AREA --- */}
+      {/* min-w-0 is added to allow flex children to shrink below 315px */}
       <div className="flex flex-col flex-1 bg-slate-50 dark:bg-gray-900 relative min-w-0">
         
         {/* MOBILE OVERLAY TOGGLE (Hamburger) */}
@@ -78,7 +79,7 @@ const Home = () => {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-7 6h7" />
             </svg>
           </button>
-          <span className="ml-2 font-bold dark:text-white text-sm truncate">Chat with {user?.username}</span>
+          <span className="ml-2 font-bold dark:text-white text-xs truncate shrink">Chat with {user?.username}</span>
         </div>
 
         <ChatHeader 
@@ -88,12 +89,14 @@ const Home = () => {
           onClearChat={handleClearChat} 
         />
         
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
           <MessageList messages={filteredMessages} setMessages={setMessages} />
         </div>
 
-        {/* CHANGE 2: Added pb-10 on mobile to lift the button above the phone's navigation bar */}
-        <div className="p-4 pb-10 md:pb-4 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700">
+        {/* --- FIXED BOTTOM INPUT AREA --- */}
+        {/* Changed pb-10 to pb-safe which uses the phone's natural safe area padding */}
+        {/* Added min-w-0 so it doesn't overflow at 315px */}
+        <div className="p-2 pb-[env(safe-area-inset-bottom,8px)] md:p-4 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700 min-w-0">
           <MessageInput onSendMessage={handleSendMessage} />
         </div>
       </div>
