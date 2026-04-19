@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api', 
+  // UPDATED: Now pointing to your live Render backend!
+  baseURL: 'https://my-chat-app-4fpe.onrender.com/api', 
   headers: {
     'Content-Type': 'application/json',
   },
