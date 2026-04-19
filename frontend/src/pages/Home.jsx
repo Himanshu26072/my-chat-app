@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Sidebar from '../components/Layout/Sidebar'; // Fixed path based on your code
+import Sidebar from '../components/Layout/Sidebar';
 import ChatHeader from '../components/Chat/ChatHeader';
 import MessageList from '../components/Chat/MessageList';
 import MessageInput from '../components/Chat/MessageInput';
@@ -8,7 +8,7 @@ import { fetchMessages, sendMessage, clearAllMessages, uploadFile } from '../ser
 const Home = () => {
   const [messages, setMessages] = useState([]);
   const [searchQuery, setSearchQuery] = useState(''); 
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Mobile menu state
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem('user'));
 
   useEffect(() => {
@@ -52,7 +52,8 @@ const Home = () => {
   );
 
   return (
-    <div className="flex h-screen w-screen bg-gray-200 dark:bg-gray-900 transition-colors duration-300 overflow-hidden relative">
+    /* CHANGE 1: Used h-[100dvh] to fix mobile browser address bar scaling issues */
+    <div className="flex h-[100dvh] w-screen bg-gray-200 dark:bg-gray-900 transition-colors duration-300 overflow-hidden relative">
       
       {/* --- RESPONSIVE SIDEBAR --- */}
       <div className={`
@@ -61,7 +62,6 @@ const Home = () => {
         transition-transform duration-300 ease-in-out
         md:relative md:translate-x-0 md:flex border-r border-gray-300 dark:border-gray-700
       `}>
-        {/* Passing user and the close function for mobile */}
         <Sidebar user={user} closeMobileMenu={() => setIsSidebarOpen(false)} />
       </div>
 
@@ -92,7 +92,10 @@ const Home = () => {
           <MessageList messages={filteredMessages} setMessages={setMessages} />
         </div>
 
-        <MessageInput onSendMessage={handleSendMessage} />
+        {/* CHANGE 2: Added pb-10 on mobile to lift the button above the phone's navigation bar */}
+        <div className="p-4 pb-10 md:pb-4 bg-white dark:bg-gray-800 border-t border-gray-300 dark:border-gray-700">
+          <MessageInput onSendMessage={handleSendMessage} />
+        </div>
       </div>
 
       {/* --- MOBILE OVERLAY BACKGROUND --- */}
